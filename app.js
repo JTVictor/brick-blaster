@@ -3,8 +3,8 @@ var ctx = canvas.getContext("2d");
 var ballRadius = 10;
 var x = canvas.width/2;
 var y = canvas.height-30;
-var dx = 3;
-var dy = -3;
+var dx = 10;
+var dy = -2;
 
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -43,6 +43,17 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBall();
 
+  if (x > canvas.width - ballRadius || x < 0 + ballRadius) {
+    dx = -dx;
+  }
+
+  if (y > canvas.height - ballRadius || y < 0 + ballRadius) {
+    dy = -dy;
+  }
+
+
+  x += dx;
+  y += dy;
 
   requestAnimationFrame(draw);
 }
