@@ -3,6 +3,9 @@ var ctx = canvas.getContext("2d");
 var ballRadius = 10;
 var x = canvas.width/2;
 var y = canvas.height-30;
+
+var z = y - 100;  // Position of arrowhead
+
 var dx = 10;
 var dy = -2;
 
@@ -27,6 +30,12 @@ function keyUpHandler(e) {
   }
 }
 
+function drawArrow() {
+  ctx.beginPath();
+  ctx.moveTo (x, y);
+  ctx.lineTo (x, z);
+  ctx.stroke();
+}
 
 
 function drawBall() {
@@ -42,6 +51,7 @@ function drawBall() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBall();
+  drawArrow();
 
   if (x > canvas.width - ballRadius || x < 0 + ballRadius) {
     dx = -dx;
@@ -52,8 +62,8 @@ function draw() {
   }
 
 
-  x += dx;
-  y += dy;
+  // x += dx;
+  // y += dy;
 
   requestAnimationFrame(draw);
 }
