@@ -3,11 +3,15 @@ var ctx = canvas.getContext("2d");
 var ballRadius = 10;
 var x = canvas.width/2;
 var y = canvas.height-30;
+var rightPressed = false;
+var leftPressed = false;
+var ballFired = false;
+var arrowGauge = 0;
 
 var z = y - 100;  // Position of arrowhead
 
-var dx = 10;
-var dy = -2;
+var dx = 7;
+var dy = 7;
 
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -16,11 +20,18 @@ document.addEventListener("keyup", keyUpHandler, false);
 function keyDownHandler(e) {
   if(e.keyCode == 39) {
     rightPressed = true;
+    // arrowGauge += 0.5;
+
   }
   else if(e.keyCode == 37) {
     leftPressed = true;
+    // arrowGauge -= 0.5;
+  }
+  else if(e.keyCode == 32) {
+    ballFired = true;
   }
 }
+
 function keyUpHandler(e) {
   if(e.keyCode == 39) {
     rightPressed = false;
@@ -29,6 +40,9 @@ function keyUpHandler(e) {
     leftPressed = false;
   }
 }
+
+
+
 
 function drawArrow() {
   ctx.beginPath();
@@ -47,11 +61,18 @@ function drawBall() {
 }
 
 
+function drawArrowGauge() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Gauge: "+arrowGauge, canvas.width-100, 20);
+}
+
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBall();
   drawArrow();
+  drawArrowGauge();
 
   if (x > canvas.width - ballRadius || x < 0 + ballRadius) {
     dx = -dx;
@@ -62,8 +83,17 @@ function draw() {
   }
 
 
-  // x += dx;
-  // y += dy;
+  if (rightPressed === true) {
+    arrowGauge += 1;
+  }
+  else if (leftPressed === true) {
+    arrowGauge -= 1;
+  }
+  else if (ballFired === true) {
+    x += dx;
+    y += dy;
+  }
+
 
   requestAnimationFrame(draw);
 }
