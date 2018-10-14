@@ -6,12 +6,16 @@ var y = canvas.height-30;
 var rightPressed = false;
 var leftPressed = false;
 var ballFired = false;
-var arrowGauge = 0;
+var angle = 0;
+
+var ax = canvas.width/2;
+var ay = canvas.height-30; // Origin point for arrow
+
 
 var z = y - 100;  // Position of arrowhead
 
-var dx = 7;
-var dy = 7;
+var dx = 3;
+var dy = 3;
 
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -20,12 +24,12 @@ document.addEventListener("keyup", keyUpHandler, false);
 function keyDownHandler(e) {
   if(e.keyCode == 39) {
     rightPressed = true;
-    // arrowGauge += 0.5;
+    // angle += 0.5;
 
   }
   else if(e.keyCode == 37) {
     leftPressed = true;
-    // arrowGauge -= 0.5;
+    // angle -= 0.5;
   }
   else if(e.keyCode == 32) {
     ballFired = true;
@@ -41,17 +45,6 @@ function keyUpHandler(e) {
   }
 }
 
-
-
-
-function drawArrow() {
-  ctx.beginPath();
-  ctx.moveTo (x, y);
-  ctx.lineTo (x, z);
-  ctx.stroke();
-}
-
-
 function drawBall() {
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -60,11 +53,22 @@ function drawBall() {
   ctx.closePath();
 }
 
+function drawArrow() {
+  ctx.beginPath();
+  ctx.save();
+  ctx.translate(ax, ay);
+  ctx.moveTo(0, 0);
+  ctx.rotate(angle * Math.PI / 180);
+  ctx.lineTo(0, -200);
+  ctx.stroke();
+  ctx.restore();
+}
 
-function drawArrowGauge() {
+
+function drawArrowAngle() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD";
-  ctx.fillText("Gauge: "+arrowGauge, canvas.width-100, 20);
+  ctx.fillText("Gauge: "+angle, canvas.width-100, 20);
 }
 
 
@@ -72,7 +76,7 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBall();
   drawArrow();
-  drawArrowGauge();
+  drawArrowAngle();
 
   if (x > canvas.width - ballRadius || x < 0 + ballRadius) {
     dx = -dx;
@@ -84,14 +88,17 @@ function draw() {
 
 
   if (rightPressed === true) {
-    arrowGauge += 1;
+    angle += 1;
+
   }
   else if (leftPressed === true) {
-    arrowGauge -= 1;
+    angle -= 1;
   }
-  else if (ballFired === true) {
+
+
+  if (ballFired === true) {
     x += dx;
-    y += dy;
+    y += -dy;
   }
 
 
